@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:templete/core/routes/routes.dart';
 import 'package:templete/core/theme/light_theme.dart';
 import 'package:templete/dependency_injection/getx_injection.dart';
-import 'package:templete/dependency_injection/path.dart';
 import 'package:templete/global/language/controller/language_controller.dart';
 import 'package:templete/service/socket_service.dart';
 import 'package:templete/utils/system_utils/system_utils.dart';
@@ -14,7 +13,7 @@ void main() async {
   SystemUtil.setStatusBarColor(color: Colors.transparent);
 
   initGetx();
-  initDependencies();
+  // initDependencies();
 
   SocketApi.init();
 

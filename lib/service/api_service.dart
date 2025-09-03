@@ -8,9 +8,8 @@ import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:mime/mime.dart';
-import 'package:templete/core/network/connection_checker.dart';
-import 'package:templete/dependency_injection/path.dart';
 import 'package:templete/global/model/response_model.dart';
 import 'package:templete/helper/local_db/local_db.dart';
 import 'package:templete/helper/tost_message/show_snackbar.dart';
@@ -42,7 +41,7 @@ Future<Map<String, String>> bearerHeaderInfo() async {
 
 String noInternetConnection = "No internet connection.!";
 
-ConnectionChecker connectionChecker = serviceLocator();
+//bool connectionChecker = false;
 
 class ApiClient {
   //=========================== Get method ======================
@@ -56,7 +55,7 @@ class ApiClient {
   }) async {
     /// ======================- Check Internet ===================
 
-    if (!await (connectionChecker.isConnected)) {
+    if (!(await InternetConnection().hasInternetAccess)) {
       return Response(statusCode: 503, statusText: noInternetConnection);
     }
 
@@ -280,7 +279,7 @@ class ApiClient {
     try {
       /// ======================- Check Internet ===================
 
-      if (!await (connectionChecker.isConnected)) {
+      if (!(await InternetConnection().hasInternetAccess)) {
         return Response(statusCode: 503, statusText: noInternetConnection);
       }
 
@@ -472,7 +471,7 @@ class ApiClient {
     try {
       /// ======================- Check Internet ===================
 
-      if (!await (connectionChecker.isConnected)) {
+      if (!(await InternetConnection().hasInternetAccess)) {
         return Response(statusCode: 503, statusText: noInternetConnection);
       }
       if (showResult) {
