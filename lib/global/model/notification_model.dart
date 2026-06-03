@@ -17,17 +17,16 @@ class NotificationModel {
     this.updatedAt,
   });
 
-  factory NotificationModel.fromJson(Map<String, dynamic> json) => NotificationModel(
+  factory NotificationModel.fromJson(Map<String, dynamic> json) =>
+      NotificationModel(
         id: json["_id"],
         toId: json["toId"],
         title: json["title"],
         message: json["message"],
         isRead: json["isRead"],
-        createdAt: json["createdAt"] ,
+        createdAt: json["createdAt"],
         updatedAt: json["updatedAt"] == null
             ? null
             : DateTime.parse(json["updatedAt"]),
       );
-
-
 }

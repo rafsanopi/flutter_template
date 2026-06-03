@@ -99,7 +99,6 @@ Map<String, String> arabic = {
   // AppStrings.newOrder: "التاريخ: ",
   // AppStrings.spam: "التاريخ: ",
   // AppStrings.reload: "التاريخ: ",
-
   AppStrings.contactNumber: "رقم الاتصال: ",
   AppStrings.address: "العنوان",
   AppStrings.dateOfBirth: "تاريخ الميلاد",

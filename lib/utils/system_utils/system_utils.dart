@@ -5,10 +5,10 @@ class SystemUtil {
   //----------------------------------hide the system bottom navigation bar
   static void hideBottomNav() {
     try {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
-          overlays: [
-            SystemUiOverlay.top
-          ]); // to hide system bottom nav and show status bar
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.immersiveSticky,
+        overlays: [SystemUiOverlay.top],
+      ); // to hide system bottom nav and show status bar
     } catch (e) {
       debugPrint("Error From SystemUtil == hideBottomNav>>>>>>>>>>>>>> $e");
     }
@@ -17,9 +17,12 @@ class SystemUtil {
   //----------------------------------------change the status bar color
   static void setStatusBarColor({required Color color}) {
     try {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
           statusBarBrightness: Brightness.light,
-          statusBarColor: color)); //to change status bar color
+          statusBarColor: color,
+        ),
+      ); //to change status bar color
     } catch (e) {
       debugPrint("Error From SystemUtil == setStatusBarColor>>>>>>>>>>>>>> $e");
     }

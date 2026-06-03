@@ -3,6 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CustomNetworkImage extends StatelessWidget {
+  const CustomNetworkImage({
+    super.key,
+    required this.imageUrl,
+    required this.height,
+    required this.width,
+    this.border,
+    this.borderRadius,
+    this.boxShape = BoxShape.rectangle,
+    this.backgroundColor,
+    this.child,
+    this.colorFilter,
+  });
+
   final String imageUrl;
   final double height;
   final double width;
@@ -12,60 +25,91 @@ class CustomNetworkImage extends StatelessWidget {
   final Color? backgroundColor;
   final Widget? child;
   final ColorFilter? colorFilter;
-  const CustomNetworkImage(
-      {super.key,
-      this.child,
-      this.colorFilter,
-      required this.imageUrl,
-      this.backgroundColor,
-      required this.height,
-      required this.width,
-      this.border,
-      this.borderRadius,
-      this.boxShape = BoxShape.rectangle});
 
   @override
   Widget build(BuildContext context) {
+    final placeholderColor = Colors.grey.withValues(alpha: 0.6);
+
     return CachedNetworkImage(
-        imageUrl: imageUrl,
-        imageBuilder: (context, imageProvider) => Container(
-              height: height,
-              width: width,
-              decoration: BoxDecoration(
-                border: border,
-                borderRadius: borderRadius,
-                shape: boxShape,
-                color: backgroundColor,
-                image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                    colorFilter: colorFilter),
-              ),
-              child: child,
+      imageUrl: imageUrl,
+      imageBuilder: (context, imageProvider) {
+        return Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            border: border,
+            borderRadius: boxShape == BoxShape.rectangle ? borderRadius : null,
+            shape: boxShape,
+            color: backgroundColor,
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+              colorFilter: colorFilter,
             ),
-        placeholder: (context, url) => Shimmer.fromColors(
-            baseColor: Colors.grey.withOpacity(0.6),
-            highlightColor: Colors.grey.withOpacity(0.3),
-            child: Container(
-              height: height,
-              width: width,
-              decoration: BoxDecoration(
-                border: border,
-                color: Colors.grey.withOpacity(0.6),
-                borderRadius: borderRadius,
-                shape: boxShape,
-              ),
-            )),
-        errorWidget: (context, url, error) => Container(
-              height: height,
-              width: width,
-              decoration: BoxDecoration(
-                border: border,
-                color: Colors.grey.withOpacity(0.6),
-                borderRadius: borderRadius,
-                shape: boxShape,
-              ),
-              child: const Icon(Icons.error),
-            ));
+          ),
+          child: child,
+        );
+      },
+      placeholder: (context, url) {
+        return Shimmer.fromColors(
+          baseColor: placeholderColor,
+          highlightColor: Colors.grey.withValues(alpha: 0.3),
+          child: _ImagePlaceholder(
+            height: height,
+            width: width,
+            border: border,
+            borderRadius: borderRadius,
+            boxShape: boxShape,
+            color: placeholderColor,
+          ),
+        );
+      },
+      errorWidget: (context, url, error) {
+        return _ImagePlaceholder(
+          height: height,
+          width: width,
+          border: border,
+          borderRadius: borderRadius,
+          boxShape: boxShape,
+          color: placeholderColor,
+          child: const Icon(Icons.error),
+        );
+      },
+    );
+  }
+}
+
+class _ImagePlaceholder extends StatelessWidget {
+  const _ImagePlaceholder({
+    required this.height,
+    required this.width,
+    required this.border,
+    required this.borderRadius,
+    required this.boxShape,
+    required this.color,
+    this.child,
+  });
+
+  final double height;
+  final double width;
+  final Border? border;
+  final BorderRadius? borderRadius;
+  final BoxShape boxShape;
+  final Color color;
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        border: border,
+        color: color,
+        borderRadius: boxShape == BoxShape.rectangle ? borderRadius : null,
+        shape: boxShape,
+      ),
+      child: child,
+    );
   }
 }

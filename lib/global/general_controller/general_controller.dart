@@ -63,8 +63,8 @@ class GeneralController extends GetxController {
   }
 
   /// =========================== Pop Up Loader ===========================
-  showPopUpLoader({required BuildContext context}) {
-    return showDialog(
+  Future<T?> showPopUpLoader<T>({required BuildContext context}) {
+    return showDialog<T>(
       barrierDismissible: true,
       barrierColor: Colors.transparent,
       context: context,
@@ -78,6 +78,12 @@ class GeneralController extends GetxController {
               height: 100,
               width: 100,
               fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return const SizedBox.square(
+                  dimension: 48,
+                  child: CircularProgressIndicator(),
+                );
+              },
             ),
           ),
         );
@@ -104,10 +110,5 @@ class GeneralController extends GetxController {
     }
 
     return "";
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
   }
 }

@@ -1,53 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+import 'package:templete/global/widgets/app_status_screen.dart';
 
 class GeneralErrorScreen extends StatelessWidget {
-  const GeneralErrorScreen({super.key, required this.onTap});
-  final Function() onTap;
+  const GeneralErrorScreen({
+    super.key,
+    required this.onTap,
+    this.title = 'Something went wrong',
+    this.message = 'Please try again in a moment.',
+    this.isLoading = false,
+  });
+
+  final VoidCallback onTap;
+  final String title;
+  final String message;
+  final bool isLoading;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // const CustomImage(imageSrc: AppImages.noInternetImage),
-            SizedBox(
-              height: 20.h,
-            ),
-            Text(
-              "Something wrong!",
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16.sp,
-                  color: Colors.black),
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            ElevatedButton(
-              onPressed: onTap,
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  minimumSize: Size(Get.width / 1.6, 40.h),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(32.r),
-                    bottomLeft: Radius.circular(32.r),
-                  ))),
-              child: const Text(
-                "Try Again",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white),
-              ),
-            )
-          ],
-        ),
-      ),
+    return AppStatusScreen(
+      icon: Icons.error_outline_rounded,
+      title: title,
+      message: message,
+      actionLabel: 'Try Again',
+      onAction: onTap,
+      isLoading: isLoading,
     );
   }
 }

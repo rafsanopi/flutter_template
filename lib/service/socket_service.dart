@@ -5,56 +5,68 @@ import 'package:templete/service/api_url.dart';
 import 'package:templete/utils/app_const/app_const.dart';
 
 class SocketApi {
-  // Singleton instance of the class
   factory SocketApi() {
     return _socketApi;
   }
 
-  // Private constructor for singleton
   SocketApi._internal();
 
-  static late io.Socket socket;
+  static io.Socket? _socket;
 
-  ///<------------------------- Socket Initialization with dynamic User ID ---------------->
+  static io.Socket get socket {
+    final currentSocket = _socket;
+    if (currentSocket == null) {
+      throw StateError('SocketApi.init() must complete before using socket.');
+    }
 
-  static void init() async {
-    String userId = await SharePrefsHelper.getString(AppConstants.userID);
-    if (userId.isEmpty || userId == "null") {
-      debugPrint('Socket Connected >>>>>>>>>>>> FALSE <<<<<<<<<<<<');
+    return currentSocket;
+  }
+
+  static bool get isInitialized => _socket != null;
+
+  static Future<void> init() async {
+    final userId = await SharePrefsHelper.getString(AppConstants.userID);
+    if (userId.isEmpty || userId == 'null') {
+      debugPrint('Socket initialization skipped: missing user id.');
       return;
     }
-    socket = io.io(
+
+    final socketConnection = io.io(
       ApiUrl.socketUrl(userID: userId),
       io.OptionBuilder().setTransports(['websocket']).build(),
     );
 
+    _socket = socketConnection;
+
     debugPrint(
-      '$userId=============> Socket initialization, connected: ${socket.connected}',
+      '$userId=============> Socket initialization, connected: '
+      '${socketConnection.connected}',
     );
 
-    // Listen for socket connection
-    socket.onConnect((_) {
+    socketConnection.onConnect((_) {
       debugPrint(
-        '==============>>>>>>> Socket Connected ${socket.connected} ===============<<<<<<<',
+        '==============>>>>>>> Socket Connected '
+        '${socketConnection.connected} ===============<<<<<<<',
       );
     });
 
-    // Listen for unauthorized events
-    socket.on('unauthorized', (dynamic data) {
+    socketConnection.on('unauthorized', (dynamic data) {
       debugPrint('Unauthorized');
     });
 
-    // Listen for errors
-    socket.onError((dynamic error) {
+    socketConnection.onError((dynamic error) {
       debugPrint('Socket error: $error');
     });
 
-    // Listen for disconnection
-    socket.onDisconnect((dynamic data) {
+    socketConnection.onDisconnect((dynamic data) {
       debugPrint('>>>>>>>>>> Socket instance disconnected <<<<<<<<<<<<$data');
     });
   }
 
-  // Static instance of the class
+  static void dispose() {
+    _socket?.dispose();
+    _socket = null;
+  }
+
   static final SocketApi _socketApi = SocketApi._internal();
 }

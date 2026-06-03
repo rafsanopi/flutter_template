@@ -1,7 +1,5 @@
-import 'package:get/get.dart';
-import 'package:templete/global/general_controller/general_controller.dart';
+import 'package:templete/app/bindings/app_binding.dart';
 
 void initGetx() {
-  // ================== Global Controller ==================
-  Get.lazyPut(() => GeneralController(), fenix: true);
+  AppBinding().dependencies();
 }
